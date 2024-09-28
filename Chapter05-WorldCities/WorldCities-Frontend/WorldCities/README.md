@@ -48,3 +48,23 @@ Como podemos ver, teníamos esta expresión directiva que apuntaba a una variabl
 displayedColumns, que definimos en el archivo cities.component.ts al principio; esta variable aloja una matriz
 que contiene todas las claves de columna que queremos mostrar, que deben ser idénticas a los nombres
 especificados a través de las distintas directivas matColumnDef .
+
+### Adding pagination with MatPaginatorModule
+
+#### Client-side paging (Páginación del lado del cliente)
+
+Como podemos ver, hemos utilizado el decorador @ViewChild para establecer una consulta de vista estática y almacenar su
+resultado en la variable paginator; dediquemos un par de minutos al propósito de dicho decorador y por qué lo necesitamos.
+
+En pocas palabras, el decorador @ViewChild se puede utilizar para obtener una referencia de un elemento de plantilla DOM
+desde dentro del componente Angular, lo que lo convierte en una característica muy útil siempre que necesitemos manipular
+las propiedades del elemento. Como podemos ver en el código anterior, el decorador se define utilizando un parámetro
+selector, que es necesario para acceder al elemento DOM: este selector puede ser un nombre de clase (si la clase tiene el
+decorador @Component o @Directive ), una variable de referencia de plantilla, un proveedor definido en el árbol de
+componentes secundarios, etc.
+
+En nuestro escenario específico, hemos utilizado el nombre de clase MatPaginator , ya que tiene el decorador @Component.
+
+### Server-side paging
+
+
