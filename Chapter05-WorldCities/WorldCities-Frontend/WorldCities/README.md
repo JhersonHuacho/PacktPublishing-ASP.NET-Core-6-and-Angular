@@ -28,3 +28,23 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 ## Serving data with Angular Material
+El módulo de Angular Material que vamos a utilizar es MatTable, que proporciona una tabla HTML con estilo Material Design que
+se puede utilizar para mostrar filas de datos.
+
+Como podemos ver, MatTableModule imita el comportamiento de una tabla HTML estándar, pero con un enfoque
+basado en plantillas para cada columna; la plantilla incluye una serie de directivas estructurales auxiliares (aplicadas
+mediante la sintaxis *<directiveName> ) que se pueden utilizar para marcar ciertas secciones de la plantilla y definir el
+rol real de la sección de plantilla. Como podemos ver, todas estas directivas terminan con el sufijo Def .
+
+A continuación se muestran los más relevantes entre los utilizados en el código anterior:
+* La vinculación del atributo [hidden] no es una sorpresa, ya que estaba presente en la tabla anterior con exactamente
+el mismo propósito: mantener la tabla oculta hasta que se hayan cargado las ciudades.
+* La directiva matColumnDef identifica una columna determinada con una clave única.
+* La directiva matHeaderCellDef define cómo mostrar el encabezado de cada columna.
+* La directiva matCellDef define cómo mostrar las celdas de datos para cada columna.
+* La directiva matHeaderRowDef , que se encuentra cerca del final del código anterior, identifica un elemento de
+configuración para la fila de encabezado de la tabla y el orden de visualización de las columnas de encabezado.
+Como podemos ver, teníamos esta expresión directiva que apuntaba a una variable de componente llamada
+displayedColumns, que definimos en el archivo cities.component.ts al principio; esta variable aloja una matriz
+que contiene todas las claves de columna que queremos mostrar, que deben ser idénticas a los nombres
+especificados a través de las distintas directivas matColumnDef .
