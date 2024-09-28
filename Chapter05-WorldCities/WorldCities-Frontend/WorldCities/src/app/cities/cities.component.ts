@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { City } from './city';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-cities',
@@ -19,6 +19,29 @@ export class CitiesComponent implements OnInit {
   constructor(private httpClient:HttpClient) { }
 
   ngOnInit(): void {
+    let pageEvent = new PageEvent();
+    pageEvent.pageIndex = 0;
+    pageEvent.pageSize = 10;
+    // this.getDataAnterior();
+    this.getData(pageEvent);
+  }
+
+  getData(event: PageEvent) {
+    let url = environment.baseUrl + 'api/cities';
+    let params = new HttpParams()
+      .set("pageIndex", event.pageIndex.toString())
+      .set("pageSize", event.pageSize.toString());
+
+    this.httpClient.get<any>(url, { params })
+      .subscribe(result => {
+        this.paginator.length = result.totalCount;
+        this.paginator.pageIndex = result.pageIndex;
+        this.paginator.pageSize = result.pageSize;
+        this.cities = new MatTableDataSource<City>(result.data);
+      }, error => console.error(error));
+  }
+
+  getDataAnterior(){
     this.httpClient.get<City[]>(environment.baseUrl + 'api/cities')
       .subscribe(result => {
         // this.cities = result;

@@ -16,11 +16,20 @@ namespace WorldCitiesAPI.Controllers
 			_context = context;
 		}
 
-		// GET: api/Cities
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<City>>> GetCities()
+		public async Task<ActionResult<ApiResult<City>>> GetCities(int pageIndex = 0, int pageSize = 10)
 		{
-			return await _context.Cities.ToListAsync();
+			return await ApiResult<City>.CreateAsync(_context.Cities.AsNoTracking(), pageIndex, pageSize);
+		}
+
+		// GET: api/Cities
+		[HttpGet("sinApiResult")]
+		public async Task<ActionResult<IEnumerable<City>>> GetCitiesSinApiResult(int pageIndex = 0, int pageSize = 10)
+		{
+			return await _context.Cities
+				.Skip(pageIndex * pageSize)
+				.Take(pageSize)
+				.ToListAsync();
 		}
 
 		// GET: api/Cities/5

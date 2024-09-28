@@ -66,5 +66,35 @@ componentes secundarios, etc.
 En nuestro escenario específico, hemos utilizado el nombre de clase MatPaginator , ya que tiene el decorador @Component.
 
 ### Server-side paging
+necesitamos encontrar una forma de proporcionar a nuestra aplicación Angular información adicional, como la siguiente:
+* El número total de páginas (y/o registros) disponibles
+* La página actual
+* El número de registros en cada página
 
+#### ApiResult
+Para lograr esto, lo mejor que podemos hacer es crear una clase dedicada al tipo de respuesta(response-type), que usaremos mucho a partir de ahora.
 
+Esta clase ApiResult contiene información realmente interesante. Tratemos de resumir lo más relevante:
+* Data: Una propiedad del tipo List<T> que se utilizará para contener los datos paginados (se traducirá a una
+matriz JSON)
+* PageIndex: Devuelve el índice basado en cero de la página actual (0 para la primera página, 1 para la segunda,
+y así sucesivamente)
+* PageSize: Devuelve el tamaño total de la página (TotalCount / PageSize)
+* TotalCount: Devuelve el número total de artículos
+* TotalPages: Devuelve el número total de páginas teniendo en cuenta el recuento total de elementos (TotalCount / PageSize).
+* HasPreviousPage: Devuelve True si la página actual tiene una página anterior, de lo contrario False
+* HasNextPage: Devuelve Verdadero si la página actual tiene una página siguiente, de lo contrario Falso
+
+Aparte de eso, la clase básicamente gira en torno al método estático CreateAsync<T>(IQueryable<T> source,
+int pageIndex, int pageSize), que puede usarse para paginar un objeto IQueryable de Entity Framework .
+
+### CitiesComponent
+
+```
+<mat-paginator [hidden]="!cities"
+(page)="getData($event)"
+[pageSize]="10"
+[pageSizeOptions]="[10, 20, 50]"
+showFirstLastButtons></mat-paginator>
+```
+Este enlace simple juega un papel muy importante: garantiza que el evento getData() se llame cada vez que el usuario interactúa con el elemento "paginator" para realizar un cambio de página, solicitando la página previous/next, la primera última página, cambiando el número de elementos a mostrar, etc. Como podemos entender fácilmente, una llamada de este tipo es necesaria para la paginación del lado del servidor, ya que necesitamos obtener los datos actualizados del servidor cada vez que tenemos que mostrar diferentes filas.
