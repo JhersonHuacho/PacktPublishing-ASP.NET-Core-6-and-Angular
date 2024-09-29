@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using WorldCitiesAPI.Data;
 using WorldCitiesAPI.Data.Models;
+//using System.Linq.Dynamic.Core;
 
 namespace WorldCitiesAPI.Controllers
 {
@@ -24,10 +25,22 @@ namespace WorldCitiesAPI.Controllers
 			int pageIndex = 0, 
 			int pageSize = 10,
 			string? sortColumn = null,
-			string? sortOrder = null)
+			string? sortOrder = null,
+			string? filterColumn = null,
+			string? filterQuery = null)
 		{
+			// first we perform the filtering...
+			var cities = _context.Cities;
+
+			if (!string.IsNullOrEmpty(filterColumn) && !string.IsNullOrEmpty(filterQuery))
+			{
+				cities = (DbSet<City>)cities.Where(c => c.Name.StartsWith(filterQuery));
+			}
+
+			// ... and then we call the ApiResult
 			return await ApiResult<City>.CreateAsync(
-				_context.Cities.AsNoTracking(), 
+				//_context.Cities.AsNoTracking(), 
+				cities.AsNoTracking(),
 				pageIndex, 
 				pageSize,
 				sortColumn,
