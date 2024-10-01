@@ -18,7 +18,26 @@ namespace WorldCitiesAPI.Controllers
 
 		// GET: api/Countries
 		[HttpGet]
-		public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
+		public async Task<ActionResult<ApiResult<Country>>> GetCountries(
+			int pageIndex = 0,
+			int pageSize = 10,
+			string? sortColumn = null,
+			string? sortOrder = null,
+			string? filterColumn = null,
+			string? filterQuery = null)
+		{
+			return await ApiResult<Country>.CreateAsync(_context.Countries.AsNoTracking(),
+				pageIndex,
+				pageSize,
+				sortColumn,
+				sortOrder,
+				filterColumn,
+				filterQuery);
+		}
+
+		// GET: api/Countries
+		[HttpGet("withoutpagination")]
+		public async Task<ActionResult<IEnumerable<Country>>> GetCountriesWithoutPagination()
 		{
 			return await _context.Countries.ToListAsync();
 		}
