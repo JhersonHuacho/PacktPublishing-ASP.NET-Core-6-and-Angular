@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { CitiesComponent } from './cities/cities.component';
 import { CountriesComponent } from './countries/countries.component';
+import { CityEditComponent } from './cities/city-edit.component';
 
 const routes: Routes = [
   {
@@ -16,7 +17,11 @@ const routes: Routes = [
   {
     path: 'countries',
     component: CountriesComponent
-  }
+  },
+  {
+    path: 'city-edit/:id',
+    component: CityEditComponent
+  },
 ];
 
 @NgModule({

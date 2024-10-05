@@ -11,6 +11,8 @@ import { CitiesComponent } from './cities/cities.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularMaterialModule } from './angular-material/angular-material.module';
 import { CountriesComponent } from './countries/countries.component';
+import { CityEditComponent } from './cities/city-edit.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,13 +20,15 @@ import { CountriesComponent } from './countries/countries.component';
     NavMenuComponent,
     HomeComponent,
     CitiesComponent,
-    CountriesComponent
+    CountriesComponent,
+    CityEditComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     AngularMaterialModule
   ],
   providers: [],
