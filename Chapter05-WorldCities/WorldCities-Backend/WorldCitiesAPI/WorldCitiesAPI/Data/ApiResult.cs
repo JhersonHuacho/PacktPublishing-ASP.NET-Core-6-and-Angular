@@ -50,6 +50,7 @@ public class ApiResult<T>
 		string? sortOrder = null,
 		string? filterColumn = null,
 		string? filterQuery = null)
+	
 	{
 		if (!string.IsNullOrEmpty(filterColumn) 
 			&& !string.IsNullOrEmpty(filterQuery) 

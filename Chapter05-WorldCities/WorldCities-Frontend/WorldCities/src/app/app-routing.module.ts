@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'city-edit/:id',
     component: CityEditComponent
   },
+  {
+    path: 'city-add',
+    component: CityEditComponent
+  },
 ];
 
 @NgModule({
