@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, Validators } from '@angular/forms';
 import { City } from './city';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Country } from '../countries/country';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { BaseFormComponent } from '../base-form.component';
+import { CityService } from './city.service';
 
 @Component({
   selector: 'app-city-edit',
@@ -36,7 +36,7 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private httpClient: HttpClient
+    private cityService: CityService
   ) {
     super();
   }
@@ -63,8 +63,7 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
       // EDIT MODE
 
       // fetch the city from the server
-      const url = environment.baseUrl + 'api/Cities/' + this.id;
-      this.httpClient.get<City>(url).subscribe(result => {
+      this.cityService.get(this.id).subscribe(result => {
         this.city = result;
         this.title = "Edit - " + this.city.name;
 
@@ -81,15 +80,10 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
 
   loadCountries() {
     // fetch all countries from the server
-    let url = environment.baseUrl + 'api/Countries';
-    let params = new HttpParams()
-      .set("pageIndex", "0")
-      .set("pageSize", "9999")
-      .set("sortColumn", "name");
-
-    this.httpClient.get<any>(url, { params }).subscribe(result => {
-      this.countries = result.data;
-    }, error => console.log(error));
+    this.cityService.getCountries(0, 9999, "name", "asc", null, null)
+      .subscribe(result => {
+        this.countries = result.data;
+      }, error => console.log(error));
   }
 
   isDupeCity(): AsyncValidatorFn {
@@ -103,7 +97,7 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
 
       const url = environment.baseUrl + 'api/Cities/IsDupeCity'
 
-      return this.httpClient.post<boolean>(url, city)
+      return this.cityService.isDupeCity(city)
         .pipe(
           map(result => {
             return (result ? { isDupeCity: true } : null);
@@ -124,17 +118,14 @@ export class CityEditComponent extends BaseFormComponent implements OnInit {
 
       if (this.id) {
         // EDIT MODE
-        const url = environment.baseUrl + 'api/Cities' + city.id;
-
-        this.httpClient.put<City>(url, city).subscribe(result => {
+        this.cityService.put(city).subscribe(result => {
           console.log("City " + city!.id + " has been updated.");
           // go back to cities view
           this.router.navigate(['/cities']);
         }, error => console.error(error))
       } else {
         // ADD NEW MODE
-        let url = environment.baseUrl + 'api/Cities';
-        this.httpClient.post<City>(url, city).subscribe(result => {
+        this.cityService.post(city).subscribe(result => {
           console.log("City " + result.id + " has been created.");
 
           // go back to cities view
