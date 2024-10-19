@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 using System.Reflection;
 
@@ -74,7 +75,13 @@ public class ApiResult<T>
 		source = source
 			.Skip(pageIndex * pageSize)
 			.Take(pageSize);
-		
+
+		#if DEBUG
+			// retrieve the SQL Query (for debug purposes)
+			var sql = source.ToParametrizedSql();
+			// TODO: do something with the sql string
+		#endif
+
 		var data = await source.ToListAsync();
 
 		return new ApiResult<T>(data, count, pageIndex, pageSize, sortColumn, sortOrder, filterColumn, filterQuery);
